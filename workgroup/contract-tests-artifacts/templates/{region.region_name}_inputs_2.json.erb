@@ -1,0 +1,67 @@
+{
+    "CreateInputs": {
+        "Name": "WorkgroupContractTests",
+        "State": "ENABLED",
+        "Tags": [
+            {
+                "Key": "tagKey1",
+                "Value": "tagValue1"
+            },
+            {
+                "Key": "tagKey2",
+                "Value": "tagValue2"
+            }
+        ],
+        "WorkGroupConfiguration": {
+            "ResultConfiguration": {
+                "AclConfiguration": {
+                    "S3AclOption": "BUCKET_OWNER_FULL_CONTROL"
+                },
+                "ExpectedBucketOwner": "{{awsathenaworkgroupcto2}}",
+                "OutputLocation": "s3://{{awsathenaworkgroupcto1}}",
+                "EncryptionConfiguration": {
+                    "EncryptionOption": "SSE_S3",
+                    "KmsKey": "{{awsathenaworkgroupcto3}}"
+                }
+            },
+            <% if ["eu-west-1", "us-west-2", "us-east-2", "us-east-1", "ap-northeast-1"].include?(@region.region_name) %>
+            "ExecutionRole": "{{awsathenaworkgroupcto4}}",
+            "CustomerContentEncryptionConfiguration": {
+                "KmsKey": "{{awsathenaworkgroupcto3}}"
+            },
+            "EngineVersion": {
+                "SelectedEngineVersion": "PySpark engine version 3"
+            }
+            <% else %>
+            "EngineVersion": {
+                "SelectedEngineVersion": "AUTO"
+            }
+            <% end %>
+        },
+        "WorkGroupConfigurationUpdates": {
+            "ResultConfigurationUpdates": {
+                "OutputLocation": "s3://{{awsathenaworkgroupcto1}}",
+                "ExpectedBucketOwner": "{{awsathenaworkgroupcto2}}"
+            },
+            <% if ["eu-west-1", "us-west-2", "us-east-2", "us-east-1", "ap-northeast-1"].include?(@region.region_name) %>
+            "EngineVersion": {
+                "SelectedEngineVersion": "PySpark engine version 3"
+            }
+            <% else %>
+            "EngineVersion": {
+                "SelectedEngineVersion": "AUTO"
+            }
+            <% end %>
+        }
+    },
+    "PatchInputs": [
+        {
+            "op": "add",
+            "path": "/Tags/2",
+            "value": {
+                "Key": "tagKey3",
+                "Value": "tagValue3"
+            }
+        }
+    ]
+}
